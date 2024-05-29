@@ -1,0 +1,17 @@
+<p>login works!</p>
+
+
+<form #userlogin="ngForm" novalidate (ngSubmit) = "handleSubmit()" >
+  <div class="mb-3">
+    <label for="email" class="form-label">Email address</label>
+    <input type="email" name ="email" class="form-control" id="email" aria-describedby="emailHelp" [(ngModel)]="credentials.email">
+    <div id="emailHelp" class="form-text">We'll never share your email with anyone else.</div>
+  </div>
+  <div class="mb-3">
+    <label for="password" class="form-label">Password</label>
+    <input type="password" name="password" class="form-control" id="password" [(ngModel)]="credentials.password">
+  </div>
+
+  <!-- Prevent default submit -->
+  <button type="submit" class="btn btn-primary">Submit</button>
+</form>
