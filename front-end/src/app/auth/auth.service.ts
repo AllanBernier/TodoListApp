@@ -1,52 +1,83 @@
 import { Injectable } from '@angular/core';
-import { HttpClient,HttpHeaders } from '@angular/common/http';
-import { Observable } from 'rxjs';
-import { tap } from 'rxjs/operators';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { BehaviorSubject, Observable } from 'rxjs';
+import { Router } from '@angular/router';
+
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
   private apiUrl = 'http://localhost:3001';
-  public token: string ='';
+  private tokenSubject = new BehaviorSubject<string | null>(localStorage.getItem('token'));
+  token = this.tokenSubject.asObservable();
+
+  constructor(private http: HttpClient, private router: Router) {
+    console.log("refresh")
+  }
 
 
-  constructor(private http: HttpClient) {
-    
+  getToken(): string | null {
+    return this.tokenSubject.value;
   }
-  signin(username: string, password: string): Observable<any> {
-    const data = { username, password };
-    return this.http.post(`${this.apiUrl}/signin`, data);
+  setToken(token: string | null): void {
+    if (token) {
+      this.router.navigate(['dashboard']);
+      localStorage.setItem('token', token);
+    } else {
+      localStorage.removeItem('token');
+    }
+    this.tokenSubject.next(token);
   }
- 
-  authenticate(email: string, password: string): Observable<any> {
+
+  signin(email: string, password: string): void {
+
     const data = { email, password };
-    console.log(data)
-    return this.http.post(`${this.apiUrl}/authenticate`, data)
-      .pipe(
-        tap((response:any) => {
-          this.token = response.token; // Store the received token 
-          localStorage.setItem('token',this.token)
-          console.log(this.token)
-        })
-      );
+    this.http.post<{ token : string, id : string}>(`${this.apiUrl}/signup`, data).subscribe({
+      next: (response) => {
+        console.log(response);
+        this.setToken(response.token);
+         localStorage.setItem('id', response.id);
+        },
+      error: (error) => {
+        console.error('There was an error!', error);
+      }
+    })
+  }
+
+  authenticate(email: string, password: string): void {
+    const data = { email, password };
+
+    this.http.post<{ token : string, id : string}>(`${this.apiUrl}/authenticate`, data).subscribe({
+      next: (response) => {
+        this.setToken(response.token);
+        },
+      error: (error) => {
+        console.error('There was an error!', error);
+      }
+    })
+
   }
   profile(): Observable<any> {
     const headers = this.createHeaders();
-    return this.http.get(`${this.apiUrl}/me`,{ headers });
+    return this.http.get(`${this.apiUrl}/me`, { headers });
   }
+
   private createHeaders(): HttpHeaders {
     let headers = new HttpHeaders({
       'Content-Type': 'application/json',
     });
-    if (this.token) {
-      headers = headers.append('Authorization', `Bearer ${this.token}`);
+    const token = localStorage.getItem('token');
+    if (token !== null) {
+      headers = headers.append('Authorization', `Bearer ${token}`);
     }
     return headers;
   }
+
   logout(): void {
-    
-    localStorage.removeItem('token');
+    this.setToken(null);
   }
- 
-  
+
+  isLoggedIn(): boolean {
+    return localStorage.getItem('token') !== null;
+  }
 }

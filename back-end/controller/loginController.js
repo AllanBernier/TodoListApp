@@ -19,26 +19,27 @@ controller.authenticate = async (req, res) => {
     });
 }
 
-controller.signin = async (req, res) => {
+controller.signup = async (req, res) => {
   User.findOne({ where: { email: req.body.email } })
-    .then(async (user) => {
-      if (user) {
-        res.status(409).json({ message: 'User already exists!' });
-        return;
-      }
-  
-      const hashed = await bcrypt.hash(req.body.password, 10);
+  .then(async (user) => {
+    if (user) {
+      res.status(409).json({ message: 'User already exists!' });
+      return;
+    }
 
-      User.create({ email: req.body.email, password : hashed }).then(async (user) => {
-        user.token = jwt.sign(user.id, process.env.JWT_SECRET);
-        await user.save();
-        res.json({ id: user.id, token: user.token });
-      }).catch((err) => {
-        res.status(500).json({ message: 'Error creating user!' });
-      });
+    const hashed = await bcrypt.hash(req.body.password, 10);
+
+    User.create({ email: req.body.email, password : hashed }).then(async (user) => {
+      user.token = jwt.sign(user.id, process.env.JWT_SECRET);
+      await user.save();
+      res.json({ id: user.id, token: user.token });
     }).catch((err) => {
       res.status(500).json({ message: 'Error creating user!' });
     });
+  }).catch((err) => {
+    console.log(err)
+    res.status(500).json({ message: 'Error creating user  !' });
+  });
 }
 
 
