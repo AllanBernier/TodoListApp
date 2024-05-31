@@ -3,42 +3,25 @@ import { RouterOutlet } from '@angular/router';
 import { AuthService } from './auth/auth.service';
 import { RouterLink } from '@angular/router';
 import { Subscription } from 'rxjs';
-
+import {MatButtonModule} from '@angular/material/button';
 
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [RouterOutlet, RouterLink],
+  imports: [RouterOutlet, RouterLink, MatButtonModule],
   template: `
-  <!doctype html>
-  <html lang="en">
-    <head>
-      <meta charset="utf-8">
-      <meta name="viewport" content="width=device-width, initial-scale=1">
-      <title>Bootstrap demo</title>
-      <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous">
-    </head>
-    <body>
-      <nav class="navbar navbar-expand-lg bg-body-tertiary">
-          <div class="container-fluid">
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-              <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse" id="navbarNav">
-              <ul class="navbar-nav">
-                @if (token !== null) {
-                  <li class="btn"><a class="nav-link" routerLink="/login">Home</a></li>
-                  <li class="btn"><a class="nav-link" (click)="logout()">Logout</a></li>
-                } @else {
-                  <li class="btn"><a class="nav-link" routerLink="/login">Signin</a></li>
-                }
-              </ul>
-            </div>
-          </div>
-        </nav>
-          <router-outlet></router-outlet>
-    </body>
-  </html>
+    <main class="flex flex-col h-screen">
+      <nav class="h-24 bg-slate-950 flex pl-4 gap-2 border-b border-gray-500">
+          @if (token !== null) {
+            <a mat-raised-button color="primary" class="self-center" routerLink="/login">Home</a>
+            <a mat-raised-button color="accent" class="self-center" (click)="logout()">Logout</a>
+          } @else {
+            <a mat-raised-button color="accent" class="self-center" routerLink="/login">Signin</a>
+          }
+      </nav>
+
+      <router-outlet></router-outlet>
+      </main>
   `,
 })
 

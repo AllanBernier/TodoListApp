@@ -3,67 +3,81 @@ import { AuthService } from '../auth/auth.service';
 import { FormControl, FormGroup, FormsModule } from '@angular/forms';
 import { ReactiveFormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
+import {MatButtonModule} from '@angular/material/button';
+import {MatInputModule} from '@angular/material/input';
 
 
 @Component({
   selector: 'app-login',
   standalone: true,
-  imports: [FormsModule, ReactiveFormsModule],
+  imports: [FormsModule, ReactiveFormsModule, MatButtonModule, MatInputModule],
   template: `
-    <!-- Style login with bootstrap -->
-    <div class="container">
-      <div class="row">
-        <div class="col-md-6 offset-md-3">
-          @if(toggleSignin){
-            <h2>Sign In</h2>
-            <form [formGroup]="credentials" (ngSubmit)="login()">
-              <div class="form-group">
-                <label for="email">Email</label>
-                <input type="email" class="form-control" id="email" formControlName="email">
-              </div>
-              <div class="form-group">
-                <label for="password">Password</label>
-                <input type="password" class="form-control" id="password" formControlName="password">
-              </div>
-              <button type="submit" class="btn btn-primary">Sign In</button>
-              <!-- button to toggle signin to signup -->
-              <button type="button" class="btn btn-secondary" (click)="toggleSignin = false">Sign Up</button>
-            </form>
-          } @else {
-            <h2>Sign Up</h2>
-            <form [formGroup]="signupForm" (ngSubmit)="signup()">
-              <div class="form-group">
-                <label for="email">Email</label>
-                <input type="email" class="form-control" id="email" formControlName="email">
-                @if(errors.passwordConfirmation){
-                  <div class="alert alert-danger" role="alert">
-                    {{errors.passwordConfirmation}}
-                  </div>
-                }
+  <div class="flex min-h-full flex-col justify-center px-6 py-12 lg:px-8">
+    <div class="sm:mx-auto sm:w-full sm:max-w-sm">
+    @if(toggleSignin){
+      <h2 class="mt-10 text-center text-2xl font-bold leading-9 tracking-tight text-gray-900">Sign in to your account</h2>
 
-              </div>
-              <div class="form-group">
-                <label for="password">Password</label>
-                <input type="password" class="form-control" id="password" formControlName="password">
-              </div>
-              <div class="form-group">
-                <label for="password">Password Confirmation</label>
-                <input type="password" class="form-control" id="password" formControlName="passwordConfirmation">
-                <!-- error password confirmation -->
-                @if(errors.passwordConfirmation){
-                  <div class="alert alert-danger" role="alert">
-                    {{errors.passwordConfirmation}}
-                  </div>
-                }
-              
-              </div>
+      <form [formGroup]="credentials" (ngSubmit)="login()" class="w-full">
+        <mat-form-field class="w-full">
+          <mat-label>Email</mat-label>
+          <input type="email" 
+            matInput 
+            formControlName="email" 
+            class="w-full"
+            placeholder="Ex. pat@example.com">
+          <!-- <mat-hint>Errors appear instantly!</mat-hint> -->
+        </mat-form-field>
+      
+        <mat-form-field class="w-full">
+          <mat-label>Password</mat-label>
+          <input type="password" 
+            matInput 
+            formControlName="password" 
+            class="w-full">
+        </mat-form-field>
 
-              <button type="submit" class="btn btn-primary">Sign Up</button>
-              <button type="button" class="btn btn-secondary" (click)="toggleSignin = true">Sign In</button>
+        <div class="flex w-full gap-4">
+          <button class="w-4/5" type="submit" mat-stroked-button color="accent">Sign In</button>
+          <button type="button" class="btn btn-secondary" (click)="toggleSignin = false">Sign Up</button>
+        </div>
+      </form>
+    } @else {
+      <h2 class="mt-10 text-center text-2xl font-bold leading-9 tracking-tight text-gray-900">Create account</h2>
+      
+      <form [formGroup]="signupForm" (ngSubmit)="signup()" class="w-full">
+        <mat-form-field class="w-full">
+          <mat-label>Email</mat-label>
+          <input type="email" 
+            matInput 
+            formControlName="email" 
+            class="w-full"
+            placeholder="Ex. pat@example.com">
+          <!-- <mat-hint>Errors appear instantly!</mat-hint> -->
+        </mat-form-field>
 
-            </form>
-          }
-      </div>
+        <mat-form-field class="w-full">
+          <mat-label>Password</mat-label>
+          <input type="password" 
+            matInput 
+            formControlName="password" 
+            class="w-full">
+        </mat-form-field>
+
+        <mat-form-field class="w-full">
+          <mat-label>Confirmation</mat-label>
+          <input type="password" 
+            matInput 
+            formControlName="passwordConfirmation" 
+            class="w-full">
+        </mat-form-field>
+
+        <div class="flex w-full gap-4">
+        <button class="w-4/5" type="submit" mat-stroked-button color="accent">Sign Up</button>
+        <button type="button" class="btn btn-secondary" (click)="toggleSignin = true">Sign In</button>
+        </div>
+      </form>
+    }
+    </div>
   </div>
 `
 

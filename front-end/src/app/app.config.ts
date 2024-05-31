@@ -4,6 +4,7 @@ import { provideHttpClient } from '@angular/common/http';
 import { routes } from './app.routes';
 import { importProvidersFrom } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
 // No provider for NgControl found in NodeInjector. Find more at 
 
 
@@ -13,7 +14,7 @@ export const appConfig: ApplicationConfig = {
     provideRouter(routes), 
     provideHttpClient(),
     importProvidersFrom(FormsModule), 
-    importProvidersFrom(ReactiveFormsModule),
+    importProvidersFrom(ReactiveFormsModule), provideAnimationsAsync(),
   ]
 
 };

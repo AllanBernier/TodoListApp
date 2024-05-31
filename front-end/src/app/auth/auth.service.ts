@@ -30,7 +30,6 @@ export class AuthService {
   }
 
   signin(email: string, password: string): void {
-
     const data = { email, password };
     this.http.post<{ token : string, id : string}>(`${this.apiUrl}/signup`, data).subscribe({
       next: (response) => {
@@ -46,7 +45,6 @@ export class AuthService {
 
   authenticate(email: string, password: string): void {
     const data = { email, password };
-
     this.http.post<{ token : string, id : string}>(`${this.apiUrl}/authenticate`, data).subscribe({
       next: (response) => {
         this.setToken(response.token);
@@ -55,8 +53,8 @@ export class AuthService {
         console.error('There was an error!', error);
       }
     })
-
   }
+
   profile(): Observable<any> {
     const headers = this.createHeaders();
     return this.http.get(`${this.apiUrl}/me`, { headers });
