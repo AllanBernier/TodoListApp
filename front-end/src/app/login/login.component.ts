@@ -1,5 +1,5 @@
 import { Component, signal,    } from '@angular/core';
-import { AuthService } from '../auth/auth.service';
+import { AuthService } from '../../services/auth/auth.service';
 import { FormControl, FormGroup, FormsModule } from '@angular/forms';
 import { ReactiveFormsModule } from '@angular/forms';
 import { Router } from '@angular/router';

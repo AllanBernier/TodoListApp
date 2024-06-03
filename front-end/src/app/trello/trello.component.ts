@@ -2,16 +2,19 @@ import { Component } from '@angular/core';
 import { List } from '../../types/list';
 import { ListComponent } from '../list/list.component';
 import { AddListComponent } from '../add-list/add-list.component';
+import { CdkDropListGroup, moveItemInArray, transferArrayItem } from '@angular/cdk/drag-drop';
+import { DropEvent } from '../../types/DropEvent';
+
 
 @Component({
   selector: 'app-trello',
   standalone: true,
-  imports: [ListComponent, AddListComponent],
+  imports: [ListComponent, AddListComponent, CdkDropListGroup],
   template: `
-  <div class="h-full w-1 min-w-full overflow-x-scroll overflow-y-hidden flex gap-8 p-4 pb-8 bg-gray-900 scrollbar-thumb-rounded-full scrollbar-thin scrollbar-track-rounded-full scrollbar-thumb-slate-700 scrollbar-track-slate-300">
+  <div cdkDropListGroup class="h-full w-1 min-w-full overflow-x-scroll overflow-y-hidden flex gap-8 p-4 pb-8 bg-gray-900 scrollbar-thumb-rounded-full scrollbar-thin scrollbar-track-rounded-full scrollbar-thumb-slate-700 scrollbar-track-slate-300">
   
-    @for (list of lists; track $index) {
-      <app-list (onCreateTask)="createTask($event, list)" (onDeleteList)="deleteList(list.id)" [list]="list"></app-list>
+    @for (list of lists; track list.id) {
+      <app-list (onChangeArray)="switchArray($event)" (onMoveItemInArray)="moveItemInArray($event, list)" (onCreateTask)="createTask($event, list)" (onDeleteList)="deleteList(list.id)" [list]="list"></app-list>
     }
     <app-add-list (onCreateList)="addList($event)"></app-add-list>
   </div>
@@ -19,18 +22,32 @@ import { AddListComponent } from '../add-list/add-list.component';
 })
 export class TrelloComponent {
 
+  moveItemInArray(event: DropEvent, list : List) {
+      moveItemInArray(list.cards, event.previousIndex, event.currentIndex);
+  }
+
+  switchArray(event : DropEvent){
+    if ( event.previousContainer !== undefined && event.container !== undefined && event.previousContainer !== event.container){
+      transferArrayItem(
+        event.previousContainer.data,
+        event.container.data,
+        event.previousIndex,
+        event.currentIndex,
+      );  
+    }
+  }
+
   createTask( name: string, list: List) {
     list.cards.push({
       title: name,
-      id: list.cards.length + 1,
-      description: '',
+      id: Math.random(),
     })
   }
 
   addList(title: string) {
     this.lists.push({
       title: title,
-      id: this.lists.length + 1,
+      id: Math.random(),
       cards: []
     })
   }
@@ -49,12 +66,10 @@ export class TrelloComponent {
         {
           id : 1,
           title: 'Card 1',
-          description: 'Description 1',
         },
         {
           id : 1,
           title: 'Card 2',
-          description: 'Description 2',
         }
       ]
     },
@@ -65,12 +80,10 @@ export class TrelloComponent {
         {
           id : 1,
           title: 'Card 3',
-          description: 'Description 3',
         },
         {
           title: 'Card 4',
           id : 1,
-          description: 'Description 4',
         }
       ]
     },
@@ -80,13 +93,11 @@ export class TrelloComponent {
       cards: [
         {
           title: 'Card 5',
-          description: 'Description 5',
           id : 1,
         },
         {
           id : 1,
           title: 'Card 6',
-          description: 'Description 6',
         }
       ]
     },
@@ -96,23 +107,19 @@ export class TrelloComponent {
       cards: [
         {
           title: 'Card 5',
-          description: 'Description 5',
           id : 1,
         },
         {
           id : 1,
           title: 'Card 6',
-          description: 'Description 6',
         },
         {
           id : 1,
           title: 'Card 6',
-          description: 'Description 6',
         },
         {
           id : 1,
           title: 'Card 6',
-          description: 'Description 6',
         },
       ]
     } 

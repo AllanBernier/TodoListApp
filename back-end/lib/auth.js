@@ -27,7 +27,7 @@ const ensureAuthorized = (req, res, next) => {
     let bearer = bearerHeader.split(" ");
     bearerToken = bearer[1];
     req.token = bearerToken;
-    req.id = jwt.verify(req.token, process.env.JWT_SECRET);
+    req.user_id = jwt.verify(req.token, process.env.JWT_SECRET);
 
     next();
     return

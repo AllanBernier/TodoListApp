@@ -1,7 +1,6 @@
 const express = require('express');
 const cors = require('cors');
 const bodyParser = require('body-parser');
-const loginRouter = require('./router/loginRouter');
 
 require('dotenv').config();
 
@@ -19,7 +18,9 @@ app.use(function(req, res, next) {
 });
 
 
-app.use(loginRouter);
+app.use( require('./router/loginRouter'));
+app.use( require('./router/tableauRouter'));
+
 
 app.get('/', (req, res) => {
   res.send('Hello from Express!');

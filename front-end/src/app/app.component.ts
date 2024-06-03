@@ -1,6 +1,6 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
-import { AuthService } from './auth/auth.service';
+import { AuthService } from '../services/auth/auth.service';
 import { RouterLink } from '@angular/router';
 import { Subscription } from 'rxjs';
 import {MatButtonModule} from '@angular/material/button';

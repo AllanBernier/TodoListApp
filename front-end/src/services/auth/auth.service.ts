@@ -31,12 +31,12 @@ export class AuthService {
 
   signin(email: string, password: string): void {
     const data = { email, password };
-    this.http.post<{ token : string, id : string}>(`${this.apiUrl}/signup`, data).subscribe({
+    this.http.post<{ token: string, id: string }>(`${this.apiUrl}/signup`, data).subscribe({
       next: (response) => {
         console.log(response);
         this.setToken(response.token);
-         localStorage.setItem('id', response.id);
-        },
+        localStorage.setItem('id', response.id);
+      },
       error: (error) => {
         console.error('There was an error!', error);
       }
@@ -45,10 +45,10 @@ export class AuthService {
 
   authenticate(email: string, password: string): void {
     const data = { email, password };
-    this.http.post<{ token : string, id : string}>(`${this.apiUrl}/authenticate`, data).subscribe({
+    this.http.post<{ token: string, id: string }>(`${this.apiUrl}/authenticate`, data).subscribe({
       next: (response) => {
         this.setToken(response.token);
-        },
+      },
       error: (error) => {
         console.error('There was an error!', error);
       }
@@ -60,7 +60,7 @@ export class AuthService {
     return this.http.get(`${this.apiUrl}/me`, { headers });
   }
 
-  private createHeaders(): HttpHeaders {
+  createHeaders(): HttpHeaders {
     let headers = new HttpHeaders({
       'Content-Type': 'application/json',
     });
@@ -77,5 +77,15 @@ export class AuthService {
 
   isLoggedIn(): boolean {
     return localStorage.getItem('token') !== null;
+  }
+
+  fetchWithHeader(endpoint: string, verbe: string, body?: any): Observable<any> {
+    const headers = this.createHeaders();
+
+    if (verbe == "POST") {
+      return this.http.post(`${this.apiUrl}${endpoint}`, { body, headers });
+    }
+    return this.http.get(`${this.apiUrl}${endpoint}`, { headers });
+
   }
 }
