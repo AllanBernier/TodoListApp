@@ -1,9 +1,11 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { List } from '../../types/list';
 import { ListComponent } from '../list/list.component';
 import { AddListComponent } from '../add-list/add-list.component';
 import { CdkDropListGroup, moveItemInArray, transferArrayItem } from '@angular/cdk/drag-drop';
 import { DropEvent } from '../../types/DropEvent';
+import { TableauService } from '../../services/auth/tableau.services';
+import { Tableau } from '../../types/tableau';
 
 
 @Component({
@@ -20,8 +22,27 @@ import { DropEvent } from '../../types/DropEvent';
   </div>
   `
 })
-export class TrelloComponent {
+export class TrelloComponent implements OnInit{
 
+  activeTab : Tableau = {
+    id: 0,
+    name: 'Default',
+    icon: 'default',
+  }
+
+  constructor(public tableauService: TableauService ) {}
+
+  ngOnInit() {
+    this.tableauService.activeTabSubject.subscribe(tab => {
+      // get tab by id
+      if (tab.id !== undefined){
+        this.tableauService.getTab(tab.id).subscribe(tab => {
+          this.activeTab = tab
+          console.log("Tab changed")
+        })  
+      }
+    })
+  }
   moveItemInArray(event: DropEvent, list : List) {
       moveItemInArray(list.cards, event.previousIndex, event.currentIndex);
   }

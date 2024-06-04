@@ -1,33 +1,32 @@
 import { Injectable } from "@angular/core";
 import { Tableau } from "../../types/tableau";
 import { AuthService } from "./auth.service";
+import { Observable, Subject, firstValueFrom } from "rxjs";
+import { HttpClient } from "@angular/common/http";
 
 @Injectable({
   providedIn: 'root'
 })
 export class TableauService {
   
+  activeTabSubject = new Subject<Tableau>()
+
   constructor(public authService: AuthService) { }
     
-  getTabs() : void {
-    this.authService.fetchWithHeader("/tableaux", "GET").subscribe({
-      next: (response) => {
-        console.log(response);
-        return response;
-      },
-      error: (error) => {
-        return console.error('There was an error!', error);
-      }
-    })
 
+  getTabs() : Promise<Tableau[]>{
+    return firstValueFrom( this.authService.fetchWithHeader<Tableau[]>("/tableaux", "GET"))
   }
 
-  createTab(tableau : Tableau){
-
+  createTab(tableau : Tableau) : Promise<Tableau> {
+    return firstValueFrom(this.authService.fetchWithHeader<Tableau>("/tableaux", "POST", tableau))
   }
 
-  deleteTab(tableau : Tableau) {
-
+  deleteTab(id : number){ 
+    return firstValueFrom(this.authService.fetchWithHeader<Tableau>(`/tableaux/${id}`, "DELETE")) 
   }
 
+  getTab(id : number){
+    return this.authService.fetchWithHeader<Tableau>(`/tableaux/${id}`, "GET")
+  }
 }

@@ -4,19 +4,21 @@ import { AskModalComponent } from '../ask-modal/ask-modal.component';
 import { Tableau } from '../../types/tableau';
 import { NewTabModalComponent } from '../new-tab-modal/new-tab-modal.component';
 import { TableauService } from '../../services/auth/tableau.services';
+import { firstValueFrom, tap } from 'rxjs';
+import { HttpClient } from '@angular/common/http';
 
 @Component({
   selector: 'app-left-panel',
   standalone: true,
-  imports: [ MatIcon, AskModalComponent, NewTabModalComponent ],
+  imports: [MatIcon, AskModalComponent, NewTabModalComponent],
   template: `
-  <div class="h-full bg-stone-950 flex flex-col"   [class]="open ? 'w-64' : 'w-12'">>
+  <div class="h-full bg-stone-950 flex flex-col"   [class]="open ? 'w-64' : 'w-12'">
       <button (click)="toggle()" class="p-1 m-1 rounded-md bg-red-900">
         <mat-icon aria-hidden="false" color="accent" aria-label="Example home icon" fontIcon="menu_open"></mat-icon>
       </button>
 
       @for (tab of tabs; track $index) {
-      <button class="p-1 m-1 rounded-md bg-stone-900 text-left flex gap-6 content-between" (mouseover)="delete_id=tab?.id || -1" (mouseout)="delete_id=-1">
+      <button (click)="switchTab(tab)" class="p-1 m-1 rounded-md bg-stone-900 text-left flex gap-6 content-between" [class]="activeTab.id === tab.id ? 'bg-green-900' : ''" (mouseover)="delete_id=tab?.id || -1" (mouseout)="delete_id=-1">
         <mat-icon aria-hidden="false" color="accent" aria-label="Example home icon" fontIcon="{{tab.icon}}"></mat-icon>
         @if (open) {
           <span class="text-white">{{tab.name}}</span>
@@ -47,45 +49,48 @@ import { TableauService } from '../../services/auth/tableau.services';
 export class LeftPanelComponent implements OnInit {
 
   newTabModal = false;
-  open = true;
+  deleteModal = false;
   delete_id = -1;
   to_delete = -1;
-  deleteModal = false;
+  open = true;
+  activeTab: Tableau = { id: 0, name: 'Default', icon: 'default' };
+  tabs: Tableau[] = []
 
-  tabs : Tableau[] = [
-    {name: "Liste de courses", icon: "shopping_cart", id:1},
-    {name: "Travail", icon: "restaurant", id:3 },
-    {name: "Clients", icon: "menu_book", id:2},
-  ]
+  constructor(public tableauService: TableauService) { }
 
-  constructor(public tableauService : TableauService) { }
-
-
-  ngOnInit(): void {
-    this.tableauService.getTabs()
+  async ngOnInit() {
+    const myrecievedtab = await this.tableauService.getTabs();
+    this.tabs = myrecievedtab;
+    if (this.tabs.length == 0) {
+      this.newTabModal = true;
+    } else {
+      this.activeTab = this.tabs[0];
+      this.tableauService.activeTabSubject.next(this.tabs[0]);
+    }
   }
 
-
-  newTab(tab : Tableau){
-    this.tabs.push(tab)
+  newTab(tab: Tableau) {
     this.newTabModal = false;
+    this.tableauService.createTab(tab).then((tab) => this.tabs.push(tab))
   }
 
-  openDeleteModal(){
+  switchTab(tab: Tableau) {
+    this.activeTab = tab;
+    this.tableauService.activeTabSubject.next(tab);
+  }
+
+  openDeleteModal() {
     this.to_delete = this.delete_id
     this.deleteModal = true;
   }
 
   delete() {
-    this.tabs = this.tabs.filter(tab => tab.id != this.to_delete)
     this.deleteModal = false;
+    this.tableauService.deleteTab(this.to_delete).then( (deleted) => this.tabs = this.tabs.filter(tab => tab.id != this.to_delete))
   }
-  
+
   toggle() {
     console.log("clicked")
     this.open = !this.open;
   }
-
-
-
 }

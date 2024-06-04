@@ -5,7 +5,7 @@ import { Component, EventEmitter, Input, Output } from '@angular/core';
   standalone: true,
   imports: [],
   template: `
-    <div class="fixed top-0 left-0 w-screen h-screen bg-black bg-opacity-50 flex justify-center items-center">
+    <div class="fixed top-0 z-10 left-0 w-screen h-screen bg-black bg-opacity-50 flex justify-center items-center">
       <div class="bg-white p-4 rounded-md">
         <h1 class="text-xl font-bold">{{text}}</h1>
         <div class="flex gap-4 mt-4">

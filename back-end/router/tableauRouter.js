@@ -6,5 +6,6 @@ const {ensureAuthorized} = require('../lib/auth');
 router.post('/tableaux', ensureAuthorized,  controller.store);
 router.get('/tableaux', ensureAuthorized, controller.getAll);
 router.delete('/tableaux/:id', ensureAuthorized, controller.delete);
+router.get('/tableaux/:id', ensureAuthorized, controller.getById);
 
 module.exports = router;

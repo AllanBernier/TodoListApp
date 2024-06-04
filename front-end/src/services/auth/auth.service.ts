@@ -79,13 +79,14 @@ export class AuthService {
     return localStorage.getItem('token') !== null;
   }
 
-  fetchWithHeader(endpoint: string, verbe: string, body?: any): Observable<any> {
+  fetchWithHeader<T>(endpoint: string, verbe: string, body?: any): Observable<T> {
     const headers = this.createHeaders();
 
     if (verbe == "POST") {
-      return this.http.post(`${this.apiUrl}${endpoint}`, { body, headers });
+      return this.http.post<T>(`${this.apiUrl}${endpoint}`, body, { headers });
+    } else if (verbe == "DELETE") {
+      return this.http.delete<T>(`${this.apiUrl}${endpoint}`, { headers });
     }
-    return this.http.get(`${this.apiUrl}${endpoint}`, { headers });
-
+    return this.http.get<T>(`${this.apiUrl}${endpoint}`, { headers });
   }
 }
