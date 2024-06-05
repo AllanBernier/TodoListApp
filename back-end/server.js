@@ -12,7 +12,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 app.use(function(req, res, next) {
     res.setHeader('Access-Control-Allow-Origin', '*');
-    res.setHeader('Access-Control-Allow-Methods', 'GET, POST, DELETE');
+    res.setHeader('Access-Control-Allow-Methods', 'GET, POST, DELETE, PUT');
     res.setHeader('Access-Control-Allow-Headers', 'X-Requested-With,content-type, Authorization');
     next();
 });
@@ -21,6 +21,7 @@ app.use(function(req, res, next) {
 app.use( require('./router/loginRouter'));
 app.use( require('./router/tableauRouter'));
 app.use( require('./router/listRouter'));
+app.use( require('./router/cardRouter'));
 
 app.get('/', (req, res) => {
   res.send('Hello from Express!');

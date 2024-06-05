@@ -3,15 +3,14 @@ const controller = {};
 
 
 controller.create = async (req, res) => {
-  console.log("Hi")
   // Get max order of lists in the tableau
   let maxOrder = await models.List.max('orderBy', { where: { tableauId: req.params.tableauId } });
-
-  models.List.create({ name : req.body.name , userId: req.userId, tableauId: req.params.tableauId, maxOrder: maxOrder ? maxOrder + 1 : 1})
+  models.List.create({ name : req.body.name ,tableauId: req.params.tableauId, maxOrder: maxOrder ? maxOrder + 1 : 1})
     .then((list) => {
       res.json(list);
     }).catch((err) => {
-      res.status(500).json({ message: 'Error creating list!' });
+      res.status(500).json({ message: 'Error creating list!'});
+      console.log(err)
     });
 }
 

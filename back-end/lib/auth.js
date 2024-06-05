@@ -33,6 +33,7 @@ const ensureAuthorized = (req, res, next) => {
     next();
     return
   }
+  console.log(bearerHeader)
   res.send(403);
 }
 

@@ -17,11 +17,23 @@ const Tableau = db.define('tableau', {
   icon: { type: sequelize.STRING },
 });
 
+const Card = db.define('card', {
+  id: { type: sequelize.INTEGER, primaryKey: true, autoIncrement: true },
+  name: { type: sequelize.STRING },
+  orderBy: { type: sequelize.INTEGER },
+  listId: { type: sequelize.INTEGER },
+});
+
 models.Tableau = Tableau;
 models.List = List;
+models.Card = Card;
+
 
 Tableau.hasMany(List);
 List.belongsTo(Tableau);
+
+List.hasMany(Card);
+Card.belongsTo(List);
 
 
 module.exports = models

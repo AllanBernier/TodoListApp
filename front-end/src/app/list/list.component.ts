@@ -6,6 +6,7 @@ import { CreateCardComponent } from '../create-card/create-card.component';
 import { DragDropModule, CdkDragDrop, CdkDropList, CdkDrag, moveItemInArray, transferArrayItem } from '@angular/cdk/drag-drop';
 import { DropEvent } from '../../types/DropEvent';
 import { Card } from '../../types/card';
+import { CardService } from '../../services/auth/card.service';
 
 
 @Component({
@@ -52,7 +53,7 @@ import { Card } from '../../types/card';
 
       <div 
         cdkDropList 
-        [cdkDropListData]="list?.cards  " 
+        [cdkDropListData]="list?.cards" 
         (cdkDropListDropped)="drop($event)"
         class="h-full w-1 min-w-full overflow-y-scroll overflow-x-hidden scrollbar-none p-4">
 
@@ -77,37 +78,27 @@ export class ListComponent {
   @Input() list: List | undefined;
   onDeleteList = output(); 
   onCreateTask = output<string>()
-  onMoveItemInArray = output<DropEvent>()
-  onChangeArray = output<DropEvent>()
 
+  onSwapCardList = output<any>()
+  onSwapCardOrder = output()
 
-
-  // drop(event: CdkDragDrop<string[]>) {
-  //   if (event.previousContainer === event.container) {
-  //     this.onMoveItemInArray.emit({previousIndex: event.previousIndex, currentIndex: event.currentIndex})    
-  //   } else {
-
-  //     transferArrayItem(
-  //       event.previousContainer.data,
-  //       event.container.data,
-  //       event.previousIndex,
-  //       event.currentIndex,
-  //     );  
-  //   }
-  // }
-
+  constructor(public cardService : CardService) { }
+  
   drop(event: any) {
     console.log("Drop")
     if (event.previousContainer === event.container) {
       moveItemInArray(event.container.data, event.previousIndex, event.currentIndex);
+      if (this.list?.cards === undefined) return
+      this.onSwapCardOrder.emit()
     } else {
-      console.log("Hi")
       transferArrayItem(
         event.previousContainer.data,
         event.container.data,
         event.previousIndex,
         event.currentIndex,
       );
+
+      this.onSwapCardList.emit(event)
     }
   }
 

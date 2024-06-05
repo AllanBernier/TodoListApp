@@ -39,8 +39,9 @@ controller.getById = (req, res) => {
   const userId = req.user_id
   const { id } = req.params
 
-  // With all relationship (include: 'cards')
-  models.Tableau.findOne({ where: { userId, id }, include: 'lists' })
+  // With relationship (lists and cards from lists)
+
+  models.Tableau.findOne({ where: { userId, id }, include: { model: models.List, include: models.Card }, order: [[models.List, 'orderBy', 'ASC'], [models.List, models.Card, 'orderBy', 'ASC']]})
     .then(tableau => {
       res.send(tableau)
     })
@@ -48,7 +49,6 @@ controller.getById = (req, res) => {
       console.log(err)
       res.status(500)
     })
-
 }
 
 module.exports = controller

@@ -86,6 +86,11 @@ export class AuthService {
       return this.http.post<T>(`${this.apiUrl}${endpoint}`, body, { headers });
     } else if (verbe == "DELETE") {
       return this.http.delete<T>(`${this.apiUrl}${endpoint}`, { headers });
+    } else if (verbe == "PUT") {
+      if (body === undefined) {
+        body = {}
+      }
+      return this.http.put<T>(`${this.apiUrl}${endpoint}`, body, { headers });
     }
     return this.http.get<T>(`${this.apiUrl}${endpoint}`, { headers });
   }
