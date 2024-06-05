@@ -11,9 +11,7 @@ export class AuthService {
   private tokenSubject = new BehaviorSubject<string | null>(localStorage.getItem('token'));
   token = this.tokenSubject.asObservable();
 
-  constructor(private http: HttpClient, private router: Router) {
-    console.log("refresh")
-  }
+  constructor(private http: HttpClient, private router: Router) {}
 
 
   getToken(): string | null {
@@ -33,14 +31,9 @@ export class AuthService {
     const data = { email, password };
     this.http.post<{ token: string, id: string }>(`${this.apiUrl}/signup`, data).subscribe({
       next: (response) => {
-        console.log(response);
         this.setToken(response.token);
         localStorage.setItem('id', response.id);
-      },
-      error: (error) => {
-        console.error('There was an error!', error);
-      }
-    })
+      }})
   }
 
   authenticate(email: string, password: string): void {

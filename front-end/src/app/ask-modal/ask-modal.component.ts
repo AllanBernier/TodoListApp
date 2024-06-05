@@ -24,8 +24,6 @@ export class AskModalComponent {
   @Output("cancel") cancel = new EventEmitter();
   
   confirmAction() {
-
-    console.log("Hi")
     this.confirm.emit();
   }
   

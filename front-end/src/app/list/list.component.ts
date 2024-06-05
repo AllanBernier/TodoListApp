@@ -85,7 +85,6 @@ export class ListComponent {
   constructor(public cardService : CardService) { }
   
   drop(event: any) {
-    console.log("Drop")
     if (event.previousContainer === event.container) {
       moveItemInArray(event.container.data, event.previousIndex, event.currentIndex);
       if (this.list?.cards === undefined) return
@@ -112,10 +111,6 @@ export class ListComponent {
   deleteConfirm() {
     this.deleteModal = false;
     this.onDeleteList.emit();
-  }
-
-  createTask(name: string) {
-    console.log(name)
   }
 
 }

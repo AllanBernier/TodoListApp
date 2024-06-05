@@ -70,9 +70,6 @@ export class TrelloComponent implements OnInit {
       if (tab.id !== undefined) {
         this.tableauService.getTab(tab.id).subscribe(tab => {
           this.activeTab = tab
-          console.log("Tab changed")
-        }, error => {
-          console.log("Error while getting tab")
         })
       }
     })
@@ -81,7 +78,6 @@ export class TrelloComponent implements OnInit {
     if (list.cards === undefined) list.cards = []
 
     this.cardService.create(name, list.id, ).then((card) => {
-      console.log(card)
       list.cards.push(card)
     })
 
@@ -95,7 +91,6 @@ export class TrelloComponent implements OnInit {
       if (this.activeTab.lists !== undefined) {
         this.activeTab.lists.push(list)
       }
-      console.log("Hi")
     })
   }
 

@@ -90,7 +90,6 @@ export class LeftPanelComponent implements OnInit {
   }
 
   toggle() {
-    console.log("clicked")
     this.open = !this.open;
   }
 }

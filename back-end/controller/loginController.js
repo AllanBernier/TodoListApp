@@ -37,7 +37,6 @@ controller.signup = async (req, res) => {
       res.status(500).json({ message: 'Error creating user!' });
     });
   }).catch((err) => {
-    console.log(err)
     res.status(500).json({ message: 'Error creating user  !' });
   });
 }

@@ -25,7 +25,6 @@ export class CardService {
   }
 
   swapCardList(cardId : number, listId : number): Promise<List>{
-    console.log("Swapping card", cardId, "to list", listId)
     return firstValueFrom( this.authService.fetchWithHeader<List>(`/card/swaplist/${cardId}/${listId}`, "PUT"))
   }
 }

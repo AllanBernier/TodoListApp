@@ -17,7 +17,6 @@ const getAuthUser = async (req, res, next) => {
       return;
     }
   }    
-  console.log("hi")
   res.send(403);
 }
 
@@ -33,7 +32,6 @@ const ensureAuthorized = (req, res, next) => {
     next();
     return
   }
-  console.log(bearerHeader)
   res.send(403);
 }
 

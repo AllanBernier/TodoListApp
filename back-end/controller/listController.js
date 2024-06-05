@@ -10,7 +10,6 @@ controller.create = async (req, res) => {
       res.json(list);
     }).catch((err) => {
       res.status(500).json({ message: 'Error creating list!'});
-      console.log(err)
     });
 }
 

@@ -11,9 +11,8 @@ controller.getAll = (req, res) => {
       res.send(tableaux)
     })
     .catch(err => {
-        res.status(500).send("Error")
-      })
-    .finally(() => console.log("finally"))
+      res.status(500).send("Error")
+    })
 }
 
 controller.store = (req, res) => {
@@ -41,12 +40,11 @@ controller.getById = (req, res) => {
 
   // With relationship (lists and cards from lists)
 
-  models.Tableau.findOne({ where: { userId, id }, include: { model: models.List, include: models.Card }, order: [[models.List, 'orderBy', 'ASC'], [models.List, models.Card, 'orderBy', 'ASC']]})
+  models.Tableau.findOne({ where: { userId, id }, include: { model: models.List, include: models.Card }, order: [[models.List, 'orderBy', 'ASC'], [models.List, models.Card, 'orderBy', 'ASC']] })
     .then(tableau => {
       res.send(tableau)
     })
     .catch(err => {
-      console.log(err)
       res.status(500)
     })
 }
