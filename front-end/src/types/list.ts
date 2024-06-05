@@ -1,7 +1,7 @@
 import { Card } from "./card";
 
 export type List = {
-  title: string;
+  name: string;
   cards: Card[];
   id: number;
 };

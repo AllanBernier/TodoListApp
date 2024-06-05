@@ -20,6 +20,7 @@ app.use(function(req, res, next) {
 
 app.use( require('./router/loginRouter'));
 app.use( require('./router/tableauRouter'));
+app.use( require('./router/listRouter'));
 
 app.get('/', (req, res) => {
   res.send('Hello from Express!');

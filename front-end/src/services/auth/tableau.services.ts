@@ -1,8 +1,7 @@
 import { Injectable } from "@angular/core";
 import { Tableau } from "../../types/tableau";
 import { AuthService } from "./auth.service";
-import { Observable, Subject, firstValueFrom } from "rxjs";
-import { HttpClient } from "@angular/common/http";
+import { Subject, firstValueFrom } from "rxjs";
 
 @Injectable({
   providedIn: 'root'

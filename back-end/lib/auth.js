@@ -33,8 +33,6 @@ const ensureAuthorized = (req, res, next) => {
     next();
     return
   }
-  console.log(req.headers)
-
   res.send(403);
 }
 

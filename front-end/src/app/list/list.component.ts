@@ -39,7 +39,7 @@ import { Card } from '../../types/card';
   template: `
     <div class="w-72 rounded-md all-screen bg-gray-800 text-white" (mouseover)="isHover=true" (mouseout)="isHover=false">
       <div class="w-full p-4 flex">
-        <p class="text-white font-bold">{{list?.title}}</p>
+        <p class="text-white font-bold">{{list?.name}}</p>
 
         @if (isHover) {
           <div class="ml-auto">
@@ -58,7 +58,7 @@ import { Card } from '../../types/card';
 
       @for (card of list?.cards; track $index) {
           <div cdkDrag [cdkDragData]="card" class="bg-gray-900 p-2 m-2 rounded-md">
-            <p class="text-white">{{card.title}}</p>
+            <p class="text-white">{{card.name}}</p>
           </div>
         }
         <app-create-card (onCreateTask)="onCreateTask.emit($event)"></app-create-card>

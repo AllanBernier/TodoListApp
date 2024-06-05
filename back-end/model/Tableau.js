@@ -1,5 +1,7 @@
 const db = require('../config/db');
 const sequelize = require('sequelize');
+const List = require('./List');
+// Many to one with list
 
 const tableauSchema = db.define('tableaux', {
   id: { type: sequelize.INTEGER, primaryKey: true, autoIncrement: true },
