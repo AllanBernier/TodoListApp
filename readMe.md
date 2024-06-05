@@ -21,3 +21,21 @@ ng serve
 ```
 
 ### Open your browser on http://localhost:4200/login
+
+### Features
+- User registration
+- User login
+- User logout
+
+- Create a new board
+- Edit a board
+- Delete a board
+
+- Create a new list
+- Delete a list
+
+- Create a new card
+- Move a card to another list
+
+### Tips:
+- Don't use angular (https://npmtrends.com/angular-vs-react-vs-vue)
